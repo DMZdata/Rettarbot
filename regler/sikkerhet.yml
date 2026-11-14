@@ -1,0 +1,28 @@
+# Rettarbot: sikkerhet
+# nivå: rød = stopper main, gul = advarsel
+# sjekk: navn på automatisk sjekk, eller manuell
+
+- id: SIK-01
+  regel: Ingen hemmeligheter (nøkler, tokens, passord) i kode
+  nivå: rød
+  sjekk: hemmeligheter
+
+- id: SIK-02
+  regel: Dependabot er satt opp
+  nivå: gul
+  sjekk: dependabot
+
+- id: SIK-03
+  regel: Ingen persondata i kode, kun syntetiske testdata
+  nivå: rød
+  sjekk: manuell
+
+- id: SIK-04
+  regel: Prod-deploy kun fra godkjent commit på main
+  nivå: rød
+  sjekk: manuell
+
+- id: SIK-05
+  regel: Separate rettigheter og hemmeligheter per miljø
+  nivå: rød
+  sjekk: manuell
