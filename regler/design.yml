@@ -1,0 +1,18 @@
+# Rettarbot: design
+# nivå: rød = stopper main, gul = advarsel
+# sjekk: navn på automatisk sjekk, eller manuell
+
+- id: DES-01
+  regel: Frontend bruker Svelte og TypeScript
+  nivå: gul
+  sjekk: svelte-typescript
+
+- id: DES-02
+  regel: DigDirs designsystem brukes der det er kompatibelt
+  nivå: gul
+  sjekk: manuell
+
+- id: DES-03
+  regel: Tilgjengelighet (WCAG) er vurdert
+  nivå: gul
+  sjekk: manuell
