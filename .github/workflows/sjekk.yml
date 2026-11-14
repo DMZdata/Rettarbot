@@ -1,0 +1,46 @@
+# Rettarbot: felles sjekk som kalles fra alle DMZ-repoer
+# develop: viser funn, stopper ingenting
+# main: røde funn gir feil, og merge stoppes (krever ruleset)
+name: Rettarbot-sjekk
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  sjekk:
+    name: Rettarbot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hent koden
+        uses: actions/checkout@v4
+        with:
+          path: kode
+          persist-credentials: false
+
+      - name: Hent Rettarbot-reglene
+        uses: actions/checkout@v4
+        with:
+          repository: DMZdata/Rettarbot
+          path: .rettarbot
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Skann etter hemmeligheter (gitleaks)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -v "$GITHUB_WORKSPACE/kode:/kode" -v "$RUNNER_TEMP:/ut" \
+            ghcr.io/gitleaks/gitleaks:latest dir /kode \
+            --report-format json --report-path /ut/gitleaks.json \
+            --exit-code 0 --no-banner
+
+      - name: Sjekk mot Rettarbot
+        env:
+          MAL_BRANCH: ${{ github.base_ref || github.ref_name }}
+          GITLEAKS_RAPPORT: ${{ runner.temp }}/gitleaks.json
+        run: node .rettarbot/sjekk/rettarbot.mjs kode .rettarbot/regler
