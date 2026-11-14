@@ -1,0 +1,33 @@
+# Rettarbot: arkitektur og kode
+# nivå: rød = stopper main, gul = advarsel
+# sjekk: navn på automatisk sjekk, eller manuell
+
+- id: ARK-01
+  regel: Ingen React, Next eller react-scripts
+  nivå: rød
+  sjekk: ingen-react
+
+- id: ARK-02
+  regel: package-lock.json er sjekket inn
+  nivå: rød
+  sjekk: package-lock
+
+- id: ARK-03
+  regel: npm ci og npm run check går gjennom
+  nivå: rød
+  sjekk: npm-check
+
+- id: ARK-04
+  regel: AGENTS.md finnes
+  nivå: gul
+  sjekk: agents-md
+
+- id: ARK-05
+  regel: CLAUDE.md henviser til AGENTS.md
+  nivå: gul
+  sjekk: claude-md
+
+- id: ARK-06
+  regel: Branchene develop (test) og main (prod) brukes
+  nivå: gul
+  sjekk: manuell
