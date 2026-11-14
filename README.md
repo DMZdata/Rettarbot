@@ -2,43 +2,51 @@
 
 > Lovverket for alt vi bygger hos DMZ data.
 
-## Hva er en rettarbot?
-
-På norrønt betyr *réttarbót* «forbedring av retten». I middelalderen var lovene på plass (blant annet Magnus Lagabøtes landslov fra 1274), men verden endret seg. I stedet for å skrive om hele lovboka utstedte kongen en retterbot: en liten rettelse, et tillegg eller en presisering.
-
-Det er akkurat det dette repoet er: ikke en ferdig lovbok, men et levende regelverk som forbedres litt etter litt.
+På norrønt betyr *réttarbót* «forbedring av retten». I middelalderen skrev ikke kongen om hele lovboka når verden endret seg, han utstedte en retterbot: en liten rettelse eller et tillegg. Det er det dette repoet er: et levende regelverk som forbedres litt etter litt.
 
 | GitHub | Middelalder |
 |---|---|
 | Pull request | Forslag til retterbot |
 | Review | Lovbehandling |
 | Merge | Retterboten er vedtatt |
-| Breaking change | Lovendring |
-| CODEOWNERS | Lovsigemennene |
+| 🔴 på main | Lovbrudd, ingen merge |
+
+## Slik virker det
+
+| Branch | Rettarboten |
+|---|---|
+| `develop` | Sjekker og viser 🟢🟡🔴, stopper ingenting |
+| `main` | 🔴 stopper merge |
+
+| Lys | Betyr |
+|---|---|
+| 🟢 | OK |
+| 🟡 | Avvik fra anbefaling (advarsel) |
+| 🔴 | Brudd på krav |
+| ⚪ | Ikke aktuelt / vurderes manuelt |
+
+Se resultatet: Actions → siste kjøring → Summary.
+
+## Koble på et repo
+
+1. Kopier [`mal/rettarbot.yml`](mal/rettarbot.yml) til `.github/workflows/rettarbot.yml` i repoet.
+2. Settings → Rules → Rulesets → ny regel for `main`: krev pull request og status-sjekken `rettarbot / Rettarbot`.
+
+Rulesets virker kun på offentlige repoer på GitHub Free.
 
 ## Innhold
 
-```text
-rettarbot/
-├── README.md
-├── lover/          Regler som gjelder alle prosjekter
-│   ├── arkitektur-og-kode.md
-│   └── sikkerhet.md
-└── utsjaad/        Utseende og brukergrensesnitt
-    └── design.md
-```
-
-| Dokument | Tema |
+| Mappe | Innhold |
 |---|---|
-| [Arkitektur og kode](lover/arkitektur-og-kode.md) | Grunnprinsipp, teknologivalg, branchstrategi, pilotrepo og AI-instruksjoner (AGENTS.md / CLAUDE.md) |
-| [Sikkerhet](lover/sikkerhet.md) | Quality Gate i GitHub Actions, Dependabot og Snyk, miljøpolicy for test og prod, deploy |
-| [Design](utsjaad/design.md) | Svelte, DigDirs designsystem, tilgjengelighet og personvern |
+| [`regler/`](regler) | Reglene (én YAML-fil per tema) |
+| [`sjekk/`](sjekk) | Skriptet som sjekker reglene |
+| [`.github/workflows/sjekk.yml`](.github/workflows/sjekk.yml) | Felles GitHub Action |
+| [`mal/`](mal) | Fil som kopieres inn i andre repoer |
 
-Senere kan vi legge til `handverk/` (praktiske retningslinjer for Svelte, TypeScript og testing) og `avgjerder/` (arkitekturbeslutninger, ADR-er).
+## Ny regel
 
-## Status
-
-Første utkast, basert på Quality Gate / POC v2.1.
+1. Legg den til i riktig fil i `regler/` (`nivå: rød` eller `gul`).
+2. Automatisk sjekk: legg til en funksjon i `sjekk/rettarbot.mjs`. Ellers: `sjekk: manuell`.
 
 ## Lisens
 
